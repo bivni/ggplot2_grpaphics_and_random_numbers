@@ -1,0 +1,68 @@
+---
+title: "demo rnorm() and ggplot2"
+author: "Илья Кочергин + заимствования" 
+date: '16 апреля 2016 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Генерация случайных чисел
+
+Ссылка на сборник рецептов <http://www.cookbook-r.com/Numbers/>
+
+```{r library}
+library(ggplot2) # Библиотека визуализации данных, предоставляющий целостный интерфейс (грамматика графики)
+```
+
+### Обеспечиваем повторяемость экспериментов
+
+
+```{r seed }
+set.seed(1234)
+rnorm(5)
+rnorm(5)
+set.seed(1234)
+rnorm(5)
+```
+
+### Основные распределения и функции
+
+#### Семейства функций 
+
+Название       | Семейство функций| Примеры 
+:-------------:|:----------------:|----------------------
+Нормальное     | norm             | <http://www.mathelp.spb.ru/book2/tv11.htm>
+Пуассона       | pois             | <http://baguzin.ru/wp/?p=5587>
+Равномерное    | unif             | 
+---------------------------------------------------------
+
+#### Префиксы
+
+префикс        | расшифровка
+:-------------:|:-----------------
+r              | Random numbers
+d              | Density
+p              | Probability P{X<=x}
+q              | Quantile
+
+
+### График случайных чисел 
+
+```{r random, echo=TRUE}
+vnorm <-  rnorm(100,mean=0, sd=1)
+vnorm
+df1 <-  data.frame(ind=seq_along(vnorm),val=vnorm)
+ggplot(data = df1,aes(x=ind,y=val)) + geom_point(color="green") + geom_hline(yintercept = mean(vnorm),color=c("blue"))
+```
+
+#### Сравним теоретическую и экспериментальную плотность распределения
+
+
+```{r density}
+base <- ggplot(data=df1, aes(x=val, colour = I("blue"))) + geom_density()
+base + stat_function(fun = dnorm,color="green")
+```
+
