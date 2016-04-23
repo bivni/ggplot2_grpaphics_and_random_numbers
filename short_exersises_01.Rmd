@@ -1,0 +1,78 @@
+---
+title: "Короткие упражнения для повторения по теме ggplot2"
+subtitle: "Часть 1"
+author: "Илья Кочергин"
+date: '22 апреля 2016 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, results='hide'}
+library(ggplot2)
+```
+
+
+## Упражнения с ласточкой 
+
+Нужно будет внести в рисунок мелкие исправления.
+
+Вот задаем по точкам фигуру
+
+```{r points}
+myfigure <- matrix( c( c(-5, 4), c(-7, 4), c(-9, 6),c(-11,6),c(-12,5), + c(-14,5),c(-12,4),c(-14,3),c(-12,3),c(-11,2),c(-10,2),c(-9, 1), + c(-9,0),c(-8,-2),c(0,-3),c(3,-2),c(19,-2),c(4,0),c(19,4),c(4,2), + c(2,3),c(6,9),c(10,11),c(3,11),c(1,10), c(-5, 4)) ,nrow=2)
+mypoint <- c(-10.5, 4.5)
+dim(myfigure)
+rownames(myfigure) <- c("x","y")
+myfigure.df <-  as.data.frame(t(myfigure))
+str(myfigure.df)
+```
+
+И рисуем выводим как многоугольник (polygon) при помощи функций пакета gglot2
+
+
+```{r wrong-plot}
+ g0 <-  ggplot(data = myfigure.df, aes(x=x,y=y)) + geom_polygon(color="dark blue",fill="cyan") 
+g0
+```
+
+Выводим вместе с глазом
+
+
+```{r add_eye}
+ g1 <-  g0 + geom_point(aes(x=mypoint[1],y=mypoint[2]),color="black",fill="yellow",shape=24,size=2.5)
+g1 
+```
+
+### *Упражнение 1.* Сделать ласточку стройной 
+
+В [документации на сайте пакета](http://docs.ggplot2.org) или в [шпаргалке](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf) выберите  подходящие систему координат (функции `coord_*`) и тему оформления. Координаты должны иметь   **фиксированное**  отношение (**ratio=1**) цены деления для оси y к цене деления x, а тема оформления должна быть с черно-белой (black-and-white) координатной сеткой.
+
+```{r proportional,echo=F}
+g2 <-  g1 + coord_fixed() + theme_bw()
+g2
+```
+
+
+### *Упражнение 2.* Сделать ласточку дохлой (отобразить симметрично оси x). 
+
+В [документации на сайте](http://docs.ggplot2.org) или в [шпаргалке](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf) выберите  подходящие систему координат (функции `coord_*`) и тему оформления. Координаты должны иметь   **фиксированное**  отношение (**ratio=-1**) цены деления для оси y к цене деления x, а тема оформления должна быть  (classic)  без координатной  сетки. Удалить названия осей.
+
+```{r,echo=F}
+g3 <-  g2 + coord_fixed(ratio=-1)  + theme_classic() + labs(x=NULL, y=NULL)
+g3
+
+
+```
+
+### *Упражнение 3.* Вдоль стройной ласточки нарисовать красного червяка (функцию  синус)
+
+При помощи `stat_function()` добавить график функции  5*sin(x)-8. Добавить название к графику.
+
+```{r worm,echo=F}
+
+g4 <-  g2 +stat_function(fun = function (x) 5*sin(x)-8, colour="red") + ggtitle("стройная ласточка и червяк")
+g4
+```
