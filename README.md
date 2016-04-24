@@ -16,7 +16,11 @@ _ _ _
 
 исходный файл short_exersises_01.Rmd
 
-результат верстки http://rpubs.com/ikochergin/174010
+результат верстки:  <http://rpubs.com/ikochergin/174692>
+
+[comment]: <> ( старая сслыка со скрытым кодом --
+http://rpubs.com/ikochergin/174010
+)
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Короткие упражнения для повторения по теме ggplot2"
+title: "Короткие упражнения для повторения по теме ggplot2 <br> Решение задач"
 subtitle: "Часть 1"
 author: "Илья Кочергин"
 date: '22 апреля 2016 г '
@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r libraries, results='hide'}
+```{r libraries, warning=FALSE}
 library(ggplot2)
 ```
 
