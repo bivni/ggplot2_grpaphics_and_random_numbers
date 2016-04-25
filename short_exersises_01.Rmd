@@ -72,7 +72,7 @@ g3
 При помощи `stat_function()` добавить график функции  5*sin(x)-8. Добавить название к графику.
 
 ```{r worm1,echo=T}
-g4 <-  g2 +stat_function(fun = function (x) 5*sin(x)-8, colour="red") + ggtitle("стройная ласточка и червяк")
+g4 <-  g2 +stat_function(fun = function (x) 5*sin(x)-8, colour="red",n=500) + ggtitle("стройная ласточка и червяк")
 g4
 ```
 
