@@ -100,6 +100,17 @@ ggplot(myMovieData_o_by_cnt,aes(Type,fill=Type)) + geom_bar()
 ```
 
 
+```{r brewer demo}
+
+bar_brewer <- ggplot(myMovieData_o_by_cnt,aes(Type,fill=Type)) + 
+  geom_bar() + scale_fill_brewer(palette="PiYG")
+bar_brewer
+bar_brewer + scale_fill_brewer(palette="BuPu")
+ggplot(myMovieData_o_by_cnt,aes(Type,fill=
+                factor(Type,levels=rev(levels(Type))))) + 
+  geom_bar() + scale_fill_brewer(palette="PuBu")
+
+```
 
 ### Раположение прямоугольников, соответствующих одному значению X
 
@@ -119,13 +130,21 @@ gbar + geom_bar(position="dodge")
 gbar + geom_bar(position="fill")
 ```
 
+```{r dist}
+dist <- data.frame(value=rnorm(10000, 1:4), group=1:4)
+ggplot(dist, aes(x=group, y=value, color=group)) +
+geom_jitter(alpha=0.2,shape=21)
+ggplot(dist, aes(x=group, y=value, color=factor(group))) +
+geom_jitter(alpha=0.2,shape=21,width=0.1) +scale_color_brewer(palette="YlOrRd")
+
+```
 
 
 #### Пример с Boxplot 
 
 ```{r boxplot1}
-gBoxPoint <- 
-ggplot()
+
+
 ```
 
 ### Шкалы и статистики 
@@ -221,7 +240,7 @@ gbar_cnt
 
 ```{r area plot}
 movieByYearByType <- myMovieData %>%  group_by(Year,Type) %>% 
-  summarise(meanBudget=mean(Budget)) %>% 
+  summarise(meanBudget=mean(as.numeric(Budget))) %>% 
   arrange(Type,Year)
 ggarea1 <- filter(movieByYearByType,Type %in% c('Drama','Comedy','Animation')) %>% 
   ggplot(data=., aes(x=Year,y=meanBudget,fill=Type)) + geom_area()
