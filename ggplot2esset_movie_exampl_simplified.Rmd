@@ -99,6 +99,8 @@ myMovieData_o_by_cnt <-
 ggplot(myMovieData_o_by_cnt,aes(Type,fill=Type)) + geom_bar()
 ```
 
+
+
 ### Раположение прямоугольников, соответствующих одному значению X
 
 3 варианта `position_adjustment` для `geom_bar(position="...")` :
@@ -117,6 +119,8 @@ gbar + geom_bar(position="dodge")
 gbar + geom_bar(position="fill")
 ```
 
+
+
 #### Пример с Boxplot 
 
 ```{r boxplot1}
@@ -125,6 +129,17 @@ ggplot()
 ```
 
 ### Шкалы и статистики 
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r remove NA}
 myMovieData <- na.omit(myMovieData)
@@ -173,6 +188,7 @@ aes(Type,Budget)) +
 #### Цветовые шкалы
 
 
+
 выдержка из `help(package="RColorBrewer")`:
 
 ColorBrewer is Copyright (c) 2002 **Cynthia Brewer**, Mark Harrower, and The Pennsylvania State University. All rights reserved. 
@@ -194,7 +210,12 @@ There are 3 types of palettes, **sequential**, **diverging**, and **qualitative*
 ```
 
 
-
+```{r barplot_count}
+gbar_cnt  <-
+  ggplot(myMovieData_o_by_cnt,aes(Type,fill=..count..)) +
+     geom_bar()
+gbar_cnt
+```
 
 #### Параметр *alpha* -- Непрозрачность
 
@@ -224,3 +245,20 @@ geom_point() + stat_smooth() + facet_grid(.~supp,margins=TRUE)
 
 ```
 
+
+```{r facets2}
+gfacet2  <- ggplot(data=myMovieData, aes(x=Year, y=Budget)) +
+geom_point(shape=21,alpha=0.1,fill="light green") + theme_bw()
+gfacet2 + facet_wrap(~ Type,ncol=2,)
+
+gfacet2
+gfacet2 + facet_grid(Type~Short)
+```
+
+```{r facets3}
+gfacet2  <- ggplot(data=myMovieData, aes(x=Year, y=Budget)) +
+geom_point(shape=21,alpha=0.1,fill="light green") + theme_bw()
+gfacet2 + facet_wrap(~ Type,ncol=2,)
+
+gfacet2
+gfacet2 + facet_grid(Type~Short,margins = T)
