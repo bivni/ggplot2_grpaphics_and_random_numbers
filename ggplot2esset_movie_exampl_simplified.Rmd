@@ -1,0 +1,202 @@
+---
+title: "from book 'ggplot2 essential' movie examples simplified"
+author: "Илья Кочергин"
+date: '29 апреля 2016 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r library}
+library(ggplot2)
+library(ggplot2movies) # Набор данных movies вынесен из новых версий ggplot2
+library(dplyr)
+```
+## Наборы данных, используемые в  примерах
+## Movie dataset (пакет ggplot2)
+
+Набор данных movies переместили в отдельный пакет `ggplot2movies` из пакета `ggplot2` в последних версиях.
+
+#### Описание из пакета `ggplot2movies`:
+
+A data frame with 28819 rows and 24 variables
+
+* title. Title of the movie.
+
+* year. Year of release.
+
+* budget. Total budget (if known) in US dollars
+
+* length. Length in minutes.
+
+* rating. Average IMDB user rating.
+
+* votes. Number of IMDB users who rated this movie.
+
+* r1-10. Multiplying by ten gives percentile (to nearest 10%) of users who rated this movie a 1.
+
+* mpaa. MPAA rating.
+
+* action, animation, comedy, drama, documentary, romance, short. Binary variables representing
+if movie was classified as belonging to that genre.
+
+```{r show movies data stucture}
+glimpse(movies)
+
+```
+
+```{r reshape movies dataset}
+d1 <-data.frame(movies[movies$Action==1, c("budget", "Short",
+"year")])
+d1$Type <- "Animation"
+d2 <-data.frame(movies[movies$Animation==1, c("budget", "Short",
+"year")])
+d2$Type <- "Animation"
+d3 <-data.frame(movies[movies$Comedy==1, c("budget", "Short",
+"year")])
+d3$Type <- "Comedy"
+d4 <-data.frame(movies[movies$Drama==1, c("budget", "Short",
+"year")])
+d4$Type <- "Drama"
+d5 <-data.frame(movies[movies$Documentary==1, c("budget", "Short",
+"year")])
+d5$Type <- "Documentary"
+d6 <-data.frame(movies[movies$Romance==1, c("budget", "Short",
+"year")])
+d6$Type <- "Romance"
+myMovieData <- rbind(d1, d2, d3, d4, d5, d6)
+names(myMovieData) <- c("Budget", "Short", "Year", "Type" )
+```
+
+Реструктуризованный набор данных (по жанрам)
+
+```{r show myMovieData dataset stucture}
+glimpse(myMovieData)
+```
+
+## Bar plots
+
+```{r barplot1}
+ggplot(myMovieData,aes(Type,fill=Type)) + geom_bar()
+```
+
+### Порядок столбцов
+
+Для номинальных данных прядок расположения на оси X можно задать при помощи изменения порядка уровней (levels) в столбце типа фактор.
+
+Упорядочим уровни (factor levels) для получения нужного порядка столбцов (по убыванию количества фильмов)
+
+```{r order levels}
+# myMovieData_o_by_cnt <- mutate(myMovieData,Type ,)
+newLevelsMovieType <- sort(table(myMovieData$Type),decreasing = T)
+newLevelsMovieType 
+myMovieData_o_by_cnt <-
+  mutate(myMovieData,
+        Type=factor(Type,levels = names(newLevelsMovieType)))
+ggplot(myMovieData_o_by_cnt,aes(Type,fill=Type)) + geom_bar()
+```
+
+### Раположение прямоугольников, соответствующих одному значению X
+
+3 варианта `position_adjustment` для `geom_bar(position="...")` :
+
+* stack -- один над другим
+
+* dodge -- один рядом с другим 
+
+* fill  -- заполняют всю высоту 
+
+```{r bar position}
+gbar <-  ggplot(data=myMovieData_o_by_cnt,
+                aes(x=Type, fill=factor(Short)))
+gbar + geom_bar(position="stack") # default 
+gbar + geom_bar(position="dodge")
+gbar + geom_bar(position="fill")
+```
+
+#### Пример с Boxplot 
+
+```{r boxplot1}
+gBoxPoint <- 
+ggplot()
+```
+
+### Шкалы и статистики 
+
+```{r remove NA}
+myMovieData <- na.omit(myMovieData)
+glimpse(myMovieData)
+```
+
+Сгруппируем по типу и подсчитаем средний бюджет
+
+```{r group by Type}
+myMovieByTypeByShort <- 
+myMovieData %>% 
+  group_by(Type,Short) %>% 
+  summarise(meanBudget=mean(Budget),sumBudget=sum(as.numeric(Budget)))
+
+ggBudgetsByType <- 
+  ggplot(myMovieByTypeByShort,aes(x=Type,y=sumBudget,fill=factor(Short))) +
+  geom_bar(stat="identity",position="dodge")
+ggBudgetsByType
+ggBudgetsByType +scale_y_log10()
+```
+
+
+**Замечание 1** `geom_bar()` неправильно воспринимается с логарифмической шкалой по Y.
+
+**Замечание 2** `geom_bar(binwidth=1)` с ныне устаревшим параметром использовался для построения столбцового графика по качественной переменной на оси X. Теперь для количественной шкалы X используется `geom_histogram()`
+
+```{r boxplot}
+ggplot(data=myMovieData,
+aes(Type,Budget)) +
+geom_jitter() + geom_boxplot(alpha=I(0.6)) +
+scale_y_log10()
+```
+
+
+
+#### Цветовые шкалы
+
+
+выдержка из `help(package="RColorBrewer")`:
+
+ColorBrewer is Copyright (c) 2002 **Cynthia Brewer**, Mark Harrower, and The Pennsylvania State University. All rights reserved. 
+The ColorBrewer palettes have been included in this R package with permission of the copyright holder. 
+`
+
+There are 3 types of palettes, **sequential**, **diverging**, and **qualitative**.
+
+1. *Sequential palettes** are suited to **ordered data** that progress from low to high. **Lightness steps** dominate the look of these schemes, with **light colors** for **low** data values to **dark colors** for **high** data **values**. 
+2. *Diverging palettes* put equal emphasis on mid-range critical values and extremes at both ends of the data range. The critical class or **break in the middle** of the legend is emphasized with **light colors** and **low and high extremes** are emphasized with **dark colors** that have **contrasting hues**. 
+3. *Qualitative palettes* do not imply magnitude differences between legend classes, and hues are used to create the primary visual differences between classes. Qualitative schemes are best suited to representing nominal or categorical data.
+
+```{r display brewer palettes}
+ library(RColorBrewer)
+ display.brewer.all(type = "seq")   ## количественные переменные -- правый край шкалы тёмный
+ display.brewer.all(type = "div")   ## количественные переменные -- края шкалы темные 
+ display.brewer.all(type = "qual")  ## качественные переменные -- контрастные цвета
+
+```
+
+
+
+
+#### Параметр *alpha* -- Непрозрачность
+
+```{r area plot}
+movieByYearByType <- myMovieData %>%  group_by(Year,Type) %>% 
+  summarise(meanBudget=mean(Budget)) %>% 
+  arrange(Type,Year)
+ggarea1 <- filter(movieByYearByType,Type %in% c('Drama','Comedy','Animation')) %>% 
+  ggplot(data=., aes(x=Year,y=meanBudget,fill=Type)) + geom_area()
+ggarea1
+ggarea1+ scale_y_log10()
+ggarea1+geom_area(alpha=0.5) + scale_y_log10()
+```
+
+
