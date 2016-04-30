@@ -154,9 +154,19 @@ ggBudgetsByType +scale_y_log10()
 ```{r boxplot}
 ggplot(data=myMovieData,
 aes(Type,Budget)) +
-geom_jitter() + geom_boxplot(alpha=I(0.6)) +
-scale_y_log10()
+ geom_jitter() + 
+  geom_boxplot(alpha=I(0.6))+
+  scale_y_log10()
 ```
+
+```{r boxplot2}
+ggplot(data=myMovieData,
+aes(Type,Budget)) +
+  geom_jitter() + 
+   geom_boxplot(alpha=I(0.6))+
+  scale_y_log10()
+```
+
 
 
 
@@ -199,4 +209,18 @@ ggarea1+ scale_y_log10()
 ggarea1+geom_area(alpha=0.5) + scale_y_log10()
 ```
 
+
+```{r}
+
+ggplot(data=ToothGrowth, aes(x=dose, y=len, col=supp)) +
+geom_point()+stat_smooth(method="lm",se=F)
+
+```
+
+
+```{r facets}
+ggplot(data=ToothGrowth, aes(x=dose, y=len, col=supp)) +
+geom_point() + stat_smooth() + facet_grid(.~supp,margins=TRUE)
+
+```
 
