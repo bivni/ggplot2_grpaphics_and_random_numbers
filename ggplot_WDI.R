@@ -65,6 +65,17 @@ big5years$name <- factor(big5years$iso2c,levels=c("CN","US","BR","RU"),ordered=T
 
 
 ggplot(big5years,mapping = aes(x=name,y=population))+
-  geom_bar(stat="identity",fill="wheat",col="red")+facet_wrap(~year,ncol = 2)
+  geom_bar(stat="identity",fill="wheat",col="red")+
+  facet_wrap(~year,ncol = 2)
 
+library(readxl)
 
+countries <- read_excel("data/Country2020.xlsx")
+View(countries)
+
+ggplot(data=countries,mapping=aes(x=Continent))+
+  + geom_bar(stat="count")+
+  coord_flip()
+
+ggplot(data=countries,mapping=aes(x=Population))+
+  geom_histogram()
