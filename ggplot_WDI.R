@@ -82,3 +82,5 @@ hist_indep <-ggplot(data=countries,mapping=aes(x=IndepYear))+
 print(hist_indep)
 
  hist_indep+xlim(1950,2010)
+
+ 
