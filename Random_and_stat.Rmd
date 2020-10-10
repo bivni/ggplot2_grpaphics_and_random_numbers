@@ -96,8 +96,24 @@ punif(40000,min=30000,max=60000)
 ```
 
 
-плотность равномерного распределения
 
+```{r}
+library(tibble)
+ggplot() + geom_function(fun=punif)+xlim(-1,2)
+```
+
+
+параметры функции добавим (от и до) 
+
+```{r}
+ggplot() + geom_function(fun=punif,args=list(min=6,max=8))+xlim(4,10)
+```
+
+
+плотность равномерного распределения
+```{r}
+ggplot() + geom_function(fun=dunif,args=list(min=6,max=8))+xlim(4,10)
+```
 
 ```{r}
 dunif(1,min=0,max=2)
@@ -114,6 +130,22 @@ dunif(-1,min=0,max=2)
 ```{r}
 dunif(4,min=3,max=6)
 ```
+
+Экспоненциальное распределение 
+
+плотность распределения
+
+```{r}
+ggplot() + geom_function(fun=dexp,args=list(rate=3))+xlim(0,10)+
+  ggtitle("Плотность экспоненциального распеределения")
+```
+
+
+```{r}
+ggplot() + geom_function(fun=pexp,args=list(rate=3))+xlim(4,10)+
+  ggtitle(" экспоненциального распеределения")
+```
+
 
 ```{r}
 dexp(x=2 ,rate=3)
