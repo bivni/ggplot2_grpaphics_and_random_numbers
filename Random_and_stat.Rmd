@@ -1,5 +1,22 @@
 
 
+# Графики функций
+
+```{r}
+library(ggplot2)
+library(tibble)
+ggplot()+geom_function(fun=sin, xlim=c(-10,10),col="red",n=1000)
+```
+
+```{r}
+
+tab <- tibble(
+   x=seq(from=0,to=10,length.out = 20),
+   y=seq(from=-10,to=0,length.out = 20)) 
+ggplot(data=tab,aes(x=x,y=y))+stat_function(fun=sin,n = 101)+geom_point()
+```
+
+
 # Случайные величины  и статистики
 
 
@@ -88,6 +105,37 @@ gf_bar(~Species,data=iris)
 * qnorm -- quantile
 
 
+#### Пример рост 100 девушек 
+
+```{r}
+mean_heigt <- 166
+stddev_height <- 5
+height <- rnorm(100,mean = mean_heigt, sd = stddev_height)
+print(height)
+```
+
+```{r}
+height[height>=175]
+
+mean(height)
+sd(height)
+quantile(height)
+```
+
+```{r}
+length(height[height<=162.0883])
+length(height[height<=165.7511])
+median(height)
+```
+
+На какой высоте косяк двери чтобы 75% проходили не стукаясь
+
+```{r}
+qnorm(p = 0.75,mean=166,sd=5)
+```
+
+
+
 кумулятивная функция равномерного распределения
 
 
@@ -174,6 +222,7 @@ qunif(1/2,min=30000,max=60000)
 
 ```{r}
 set.seed(1234)
+rnorm(10)
 ```
 
 ```{r}
@@ -249,6 +298,7 @@ mean(rnd_norm_10_2$x)
 median(rnd_norm_10_2$x)
 sd(rnd_norm_10_2$x)
 var(rnd_norm_10_2$x)
+max(rnd_norm_10_2)
 ```
 
 

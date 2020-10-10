@@ -83,4 +83,6 @@ print(hist_indep)
 
  hist_indep+xlim(1950,2010)
 
+western_europe <- countries[countries$Region=="Western Europe",] 
+ ggplot(data=western_europe)+geom_bar(mapping = aes(x=CountryCode,y=SurfaceArea),stat="identity")
  
