@@ -77,5 +77,8 @@ ggplot(data=countries,mapping=aes(x=Continent))+
   + geom_bar(stat="count")+
   coord_flip()
 
-ggplot(data=countries,mapping=aes(x=Population))+
+hist_indep <-ggplot(data=countries,mapping=aes(x=IndepYear))+
   geom_histogram()
+print(hist_indep)
+
+ hist_indep+xlim(1950,2010)
