@@ -54,3 +54,92 @@ countries %>% filter(Region=='Eastern Europe' )
 ```{r}
 countries %>% filter(Region=='Eastern Europe', SurfaceArea>100000)
 ```
+
+
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000)
+```
+
+
+
+```{r}
+countries %>% filter(Region %in% c('Eastern Europe','Baltic Countries'), SurfaceArea<100000)
+```
+
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(SurfaceArea)
+```
+
+
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(Name)
+```
+
+
+
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(desc(IndepYear))
+```
+
+
+```{r}
+countries %>% filter(Region %in% c('Eastern Europe','Baltic Countries')) %>%
+  arrange(Region, desc(SurfaceArea))
+```
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(desc(IndepYear)) %>% 
+  select(Name,SurfaceArea,IndepYear)
+```
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(desc(IndepYear)) %>% 
+  select(-c(Continent, GovernmentForm))
+```
+
+
+```{r}
+countries %>% filter(Region=='Eastern Europe'|Region=='Baltic Countries', SurfaceArea<100000) %>% 
+  arrange(desc(IndepYear)) %>% 
+  select(contains("Code"), Name, IndepYear)
+```
+
+
+```{r}
+population %>% filter(CountryCode=='RUS') %>% 
+  mutate(pop_mln=Population/1e6)
+```
+
+
+```{r}
+population %>% filter(CountryCode=='RUS') %>% 
+  transmute(CountryCode, pop_mln=Population/1e6)
+```
+
+
+
+```{r}
+population %>% filter(CountryCode=='RUS') %>% 
+  summarise(
+     avg_pol_mln=mean(Population),
+      min_year=min(ValueYear),
+     max_year=max(ValueYear))
+```
+
+```{r}
+population %>%  filter(CountryCode >="RUS"& CountryCode <="USA" ) %>% 
+  group_by(CountryCode) %>% 
+  summarise(
+     avg_pol_mln=mean(Population),
+      min_year=min(ValueYear),
+     max_year=max(ValueYear)) %>% 
+     arrange(desc(avg_pol_mln))
+```
